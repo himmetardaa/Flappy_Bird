@@ -7,7 +7,7 @@ let context;
 //Bird 
 let birdWidth = 34;
 let birdHeight = 24;
-let birdX = boardWidth/8;
+let birdX = boardWidth/8; //x ve y kuşun konumu .
 let birdY = boardHeight/2;
 let birdImg;
 
@@ -36,15 +36,21 @@ let gravity = 0.4;
 let gameOver = false;
 let score = 0;
  
+function startGame() {
+    document.getElementById("menu").style.display = "none";
+}
+  
 
 window.onload = function() {
     board = document.getElementById("board");
     board.height = boardHeight;
     board.width = boardWidth;
     context = board.getContext("2d"); // Boarda çizim yapmak için kullanılır.(Context=İçerik)
-
+    
     //flappy bird Resimi oluşturma.
     birdImg = new Image();
+    context.fillRect(bird.x, bird.y, bird.width, bird.height);
+    context.fillStyle = "green";
     birdImg.src = "./flappybird.png";
     birdImg.onload = function(){
         context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
@@ -57,7 +63,7 @@ window.onload = function() {
     bottomPipeImg.src = "./bottompipe.png";
 
     requestAnimationFrame(update);
-    setInterval(placePipes, 1500);
+    setInterval(placePipes, 1300);
     document.addEventListener("keydown",moveBird);
 }
 
@@ -77,6 +83,8 @@ function update(){
 
     if (bird.y > board.height) {
         gameOver = true;
+        var audio = document.getElementById("die");
+        audio.play();
     }
 
     for (let i = 0; i < pipeArray.length; i++) {
@@ -87,10 +95,14 @@ function update(){
         if (!pipe.passed && bird.x > pipe.x + pipe.width) {
             score += 0.5;
             pipe.passed = true;
+            var audio = document.getElementById("score");
+            audio.play();
         }
 
         if (detectCollision(bird, pipe)) {
             gameOver = true;
+            var audio = document.getElementById("die");
+            audio.play();
         }
     }
     
@@ -105,7 +117,7 @@ function update(){
     context.fillText(score, 5, 45);
 
     if (gameOver) {
-        context.fillText("GAME OVER", 5, 90);
+        context.fillText("GAME OVER", 50, 350);
     }
 }
 
@@ -142,6 +154,8 @@ function placePipes(){
 function moveBird(e) {
     if (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyX") {
         velocityY = -6;
+        var audio = document.getElementById("fly");
+        audio.play();
     }
 
     //Oyunu yeniden başlatma
@@ -159,17 +173,3 @@ function detectCollision (a,b) {
            a.y < b.y + b.height &&
            a.y + a.height > b.y; 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
