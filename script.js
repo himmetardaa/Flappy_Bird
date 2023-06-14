@@ -62,16 +62,16 @@ window.onload = function() {
 }
 
 function update(){
+    requestAnimationFrame(update);
+
     if (gameOver) {
         return;
     }
 
-    requestAnimationFrame(update);
     context.clearRect(0, 0, board.height, board.height);
     
-    //Bird
+    //Bird fizik
     velocityY += gravity;
-    // bird.y += velocityY;
     bird.y = Math.max(bird.y + velocityY, 0); 
     context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
 
